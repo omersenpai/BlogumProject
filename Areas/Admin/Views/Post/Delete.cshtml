@@ -1,0 +1,57 @@
+@model BlogProject.Entities.Post
+
+@{
+    ViewData["Title"] = "Blog Yazısı Sil";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Blog Yazısı Silme Onayı</h6>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-danger">
+                <h5>Bu blog yazısını silmek istediğinize emin misiniz?</h5>
+                <p>Bu işlem geri alınamaz ve yazıya ait tüm yorumlar da silinecektir.</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h3>@Model.Title</h3>
+                    <div class="d-flex text-muted small mb-3">
+                        <div class="me-3"><i class="fas fa-user"></i> @(Model.User?.Name + " " + Model.User?.Surname)</div>
+                        <div class="me-3"><i class="fas fa-calendar"></i> @Model.PublishedOn.ToString("dd.MM.yyyy HH:mm")</div>
+                        <div class="me-3"><i class="fas fa-folder"></i> @(Model.Category?.Name ?? "Kategori Yok")</div>
+                        <div class="me-3">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Pasif</span>
+                            }
+                        </div>
+                        <div>
+                            <i class="fas fa-comment"></i> @(Model.Comments?.Count ?? 0) Yorum
+                        </div>
+                    </div>
+                    <p>@Model.Description</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="~/img/@Model.Image" alt="@Model.Title" class="img-fluid rounded" style="max-height: 150px; object-fit: cover;">
+                    }
+                </div>
+            </div>
+
+            <form asp-area="Admin" asp-controller="Post" asp-action="Delete" method="post">
+                <input type="hidden" asp-for="PostId" />
+                <input type="submit" value="Sil" class="btn btn-danger" />
+                <a asp-area="Admin" asp-controller="Post" asp-action="Index" class="btn btn-secondary">İptal</a>
+            </form>
+        </div>
+    </div>
+</div> 

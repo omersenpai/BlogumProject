@@ -1,0 +1,68 @@
+@model IEnumerable<BlogProject.Entities.Category>
+
+@{
+    ViewData["Title"] = "Kategori Listesi";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Tüm Kategoriler</h1>
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="bi bi-house"></i> Ana Sayfa
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Kategori Adı</th>
+                        <th>Açıklama</th>
+                        <th class="text-center">Yazı Sayısı</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@category.Name</strong>
+                            </td>
+                            <td>
+                                @if (string.IsNullOrEmpty(category.Description))
+                                {
+                                    <span class="text-muted fst-italic">Açıklama yok</span>
+                                }
+                                else
+                                {
+                                    @(category.Description.Length > 100 
+                                        ? category.Description.Substring(0, 100) + "..." 
+                                        : category.Description)
+                                }
+                            </td>
+                            <td class="text-center">
+                                <span class="badge rounded-pill bg-primary">
+                                    @(category.Posts?.Count() ?? 0)
+                                </span>
+                            </td>
+                            <td>
+                                <a href="/kategori/@category.Url" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-eye"></i> Görüntüle
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Henüz kategori bulunmamaktadır.
+        </div>
+    }
+</div> 

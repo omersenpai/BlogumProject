@@ -1,0 +1,44 @@
+@model BlogProject.Entities.User
+@{
+    ViewData["Title"] = "Kullanıcı Sil";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mb-4">Kullanıcı Sil</h1>
+    
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Kullanıcıyı Silmek İstediğinize Emin Misiniz?</h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle-fill"></i> 
+                        Bu işlem geri alınamaz. Kullanıcı veritabanından tamamen silinmeyecek ancak sistemde silinmiş olarak işaretlenecektir.
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5>@Model.Name @Model.Surname</h5>
+                        <p><strong>E-posta:</strong> @Model.Email</p>
+                        <p><strong>Kayıt Tarihi:</strong> @Model.CreatedAt.ToString("dd.MM.yyyy")</p>
+                    </div>
+                    
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Kullanıcıyı Sil
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-x"></i> İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

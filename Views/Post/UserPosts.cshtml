@@ -1,0 +1,115 @@
+@model IEnumerable<BlogProject.Entities.Post>
+@using System.Security.Claims
+@{
+    var user = ViewBag.User;
+    ViewData["Title"] = $"{user.Name} {user.Surname}'ın Yazıları";
+    
+    var currentPage = ViewBag.CurrentPage;
+    var pageSize = ViewBag.PageSize;
+    var totalPosts = Model.Count();
+    var totalPages = (int)Math.Ceiling((double)totalPosts / pageSize);
+    
+    // URL slug için kullanıcı adını formatla
+    var userSlug = $"{user.Name.ToLower()}-{user.Surname.ToLower()}";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">@user.Name @user.Surname'ın Yazıları</h1>
+            
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    <h4>Henüz blog yazısı bulunmuyor.</h4>
+                    <p>
+                        @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == user.Id)
+                        {
+                            <a asp-controller="Post" asp-action="Create" class="btn btn-primary mt-2">
+                                <i class="bi bi-plus-circle"></i> Yazı Ekle
+                            </a>
+                        }
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+                    @foreach (var post in Model)
+                    {
+                        <div class="col">
+                            <div class="card h-100">
+                                @if (!string.IsNullOrEmpty(post.Image))
+                                {
+                                    <img src="~/img/@post.Image" class="card-img-top" alt="@post.Title" style="height: 200px; object-fit: cover;">
+                                }
+                                
+                                <div class="card-body">
+                                    <h5 class="card-title">@post.Title</h5>
+                                    <p class="card-text text-muted small">
+                                        <i class="bi bi-calendar"></i> @post.PublishedOn.ToString("dd.MM.yyyy")
+                                        <span class="ms-2"><i class="bi bi-tag"></i> @post.Category.Name</span>
+                                    </p>
+                                    <p class="card-text">@post.Description</p>
+                                </div>
+                                
+                                <div class="card-footer bg-transparent d-flex justify-content-between">
+                                    <a asp-controller="Post" asp-action="ByUrl" asp-route-url="@post.Url" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Oku
+                                    </a>
+                                    <div>
+                                        <a asp-controller="Post" asp-action="Edit" asp-route-id="@post.PostId" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-pencil"></i> Düzenle
+                                        </a>
+                                        <a asp-controller="Post" asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i> Sil
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <!-- Sayfalama -->
+                @if (totalPages > 1)
+                {
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            @if (currentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="Post" asp-action="UserPosts" 
+                                       asp-route-id="@user.Id" asp-route-name="@userSlug"
+                                       asp-route-page="@(currentPage - 1)" asp-route-pageSize="@pageSize">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+                            }
+                            
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" asp-controller="Post" asp-action="UserPosts" 
+                                       asp-route-id="@user.Id" asp-route-name="@userSlug"
+                                       asp-route-page="@i" asp-route-pageSize="@pageSize">@i</a>
+                                </li>
+                            }
+                            
+                            @if (currentPage < totalPages)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-controller="Post" asp-action="UserPosts" 
+                                       asp-route-id="@user.Id" asp-route-name="@userSlug"
+                                       asp-route-page="@(currentPage + 1)" asp-route-pageSize="@pageSize">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            }
+        </div>
+    </div>
+</div> 

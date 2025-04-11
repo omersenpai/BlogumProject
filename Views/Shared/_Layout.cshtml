@@ -1,0 +1,169 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BlogProject.Entities
+@using System.Security.Claims
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Blogum</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BlogProject.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/blog.jpg" alt="Blog Logo" class="me-2" width="30" height="30" style="border-radius: 50%;">
+                    Blogum
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+                        
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                    <i class="bi bi-gear-fill"></i> Admin Paneli
+                                </a>
+                            </li>
+                        }
+                        
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Post" asp-action="Create">
+                                    <i class="bi bi-plus-circle"></i> Yazı Ekle
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Profile">
+                                    <i class="bi bi-person-circle"></i> Profil
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Post" asp-action="UserPosts" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">
+                                    <i class="bi bi-journal-text"></i> Yazılarım
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    
+                    <div class="d-flex align-items-center">
+                        <form class="d-flex me-2" asp-controller="Home" asp-action="Search" method="get">
+                            <div class="input-group">
+                                <input class="form-control" type="search" name="query" placeholder="Ara..." value="@ViewBag.SearchQuery">
+                                <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+                        
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <form class="d-inline" asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="btn btn-outline-light ms-2">
+                                    <i class="bi bi-box-arrow-right"></i> Çıkış
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-light ms-2" asp-controller="Account" asp-action="Register">Kayıt Ol</a>
+                            <a class="btn btn-outline-light ms-2" asp-controller="Account" asp-action="Login">Giriş Yap</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- Hakkımızda -->
+                <div class="col-md-3 mb-3">
+                    <h5 class="mb-3 border-bottom pb-2">Hakkımızda</h5>
+                    <p class="small">Blogum, kullanıcıların düşüncelerini özgürce paylaşabildiği bir platformdur. Teknoloji, programlama ve web geliştirme konularında içerikler sunuyoruz.</p>
+                </div>
+                
+                <!-- İletişim Bilgileri -->
+                <div class="col-md-3 mb-3">
+                    <h5 class="mb-3 border-bottom pb-2">İletişim</h5>
+                    <p class="small"><i class="bi bi-envelope"></i> <a href="mailto:omersargin4116@hotmail.com" class="text-white text-decoration-none">omersargin4116@hotmail.com</a></p>
+                    <p class="small"><i class="bi bi-telephone"></i> <a href="tel:+905423628751" class="text-white text-decoration-none">+90 (542) 362-8751</a></p>
+                </div>
+                
+                <!-- Hızlı Erişim -->
+                <div class="col-md-3 mb-3">
+                    <h5 class="mb-3 border-bottom pb-2">Ana Sayfa</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a href="/" class="text-white text-decoration-none"><i class="bi bi-house-door"></i> Ana Sayfa</a></li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="mb-1"><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="text-white text-decoration-none"><i class="bi bi-gear-fill"></i> Admin Paneli</a></li>
+                        }
+                        <li class="mb-1"><a asp-controller="Post" asp-action="Create" class="text-white text-decoration-none"><i class="bi bi-plus-circle"></i> Yazı Ekle</a></li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="mb-1"><a asp-controller="Post" asp-action="UserPosts" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)" class="text-white text-decoration-none"><i class="bi bi-journal-text"></i> Yazılarım</a></li>
+                            <li class="mb-1"><a asp-controller="Account" asp-action="Profile" class="text-white text-decoration-none"><i class="bi bi-person"></i> Profil</a></li>
+                        }
+                        else
+                        {
+                            <li class="mb-1"><a asp-controller="Account" asp-action="Login" class="text-white text-decoration-none"><i class="bi bi-box-arrow-in-right"></i> Giriş Yap</a></li>
+                            <li class="mb-1"><a asp-controller="Account" asp-action="Register" class="text-white text-decoration-none"><i class="bi bi-person-plus"></i> Kayıt Ol</a></li>
+                        }
+                    </ul>
+                </div>
+                
+                <!-- Sosyal Medya ve Gizlilik -->
+                <div class="col-md-3 mb-3">
+                    <h5 class="mb-3 border-bottom pb-2">Bizi Takip Edin</h5>
+                    <div class="mb-3">
+                        <a href="https://www.instagram.com/omersrgnn/" class="text-white text-decoration-none me-2 fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/omertsargin/" class="text-white text-decoration-none me-2 fs-5"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://github.com/omersenpai" class="text-white text-decoration-none me-2 fs-5"><i class="bi bi-github"></i></a>
+                    </div>
+                    <h5 class="mb-3 mt-4 border-bottom pb-2">Yasal</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-1"><a asp-controller="Home" asp-action="Privacy" class="text-white text-decoration-none"><i class="bi bi-shield-lock"></i> Gizlilik Politikası</a></li>
+                        <li class="mb-1"><a asp-controller="Home" asp-action="Terms" class="text-white text-decoration-none"><i class="bi bi-file-text"></i> Kullanım Şartları</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Telif Hakkı -->
+            <div class="row mt-3 pt-3 border-top">
+                <div class="col-md-12 text-center">
+                    <p class="small mb-0">
+                        &copy; @DateTime.Now.Year Blog Sitesi. Tüm hakları saklıdır.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

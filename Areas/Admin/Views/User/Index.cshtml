@@ -1,0 +1,112 @@
+@model IEnumerable<BlogProject.Models.UserViewModel>
+@{
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mb-4">Kullanıcı Yönetimi</h1>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Kullanıcılar</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>E-posta</th>
+                            <th>Roller</th>
+                            <th>Durum</th>
+                            <th>Blog Yazısı</th>
+                            <th>Yorum</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr @(user.IsDeleted ? "class=table-danger" : "")>
+                                <td>@user.FullName @if (user.IsDeleted) { <span class="badge bg-danger">Silinmiş</span> }</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @foreach (var role in user.Roles)
+                                    {
+                                        <span class="badge bg-info text-dark me-1">@role</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td>@user.PostCount</td>
+                                <td>@user.CommentCount</td>
+                                <td>@user.CreatedAt.ToString("dd.MM.yyyy")</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-sm btn-info">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="ResetPassword" asp-route-id="@user.Id" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-key"></i>
+                                        </a>
+                                        <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" class="d-inline">
+                                            @if (user.IsActive)
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Pasif yap" onclick="return confirm('Kullanıcıyı pasif yapmak istediğinize emin misiniz?')">
+                                                    <i class="bi bi-toggle-off"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-success" title="Aktif yap" onclick="return confirm('Kullanıcıyı aktif yapmak istediğinize emin misiniz?')">
+                                                    <i class="bi bi-toggle-on"></i>
+                                                </button>
+                                            }
+                                        </form>
+                                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json'
+                },
+                order: [[6, 'desc']]  // Kayıt tarihi sıralama
+            });
+        });
+    </script>
+} 

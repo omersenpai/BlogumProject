@@ -1,0 +1,85 @@
+@model BlogProject.Models.UserViewModel
+@{
+    ViewData["Title"] = "Kullanıcı Detayları";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mb-4">Kullanıcı Detayları</h1>
+    
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Profil Bilgileri</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h4>@Model.FullName</h4>
+                            <p class="text-muted">@Model.Email</p>
+                            
+                            <div class="mb-3">
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <span class="badge bg-info text-dark me-1">@role</span>
+                                }
+                            </div>
+                            
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Pasif</span>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Kayıt Tarihi:</strong> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+                            <p><strong>Blog Yazısı Sayısı:</strong> @Model.PostCount</p>
+                            <p><strong>Yorum Sayısı:</strong> @Model.CommentCount</p>
+                        </div>
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(Model.Bio))
+                    {
+                        <div class="mt-3">
+                            <h6>Hakkında</h6>
+                            <p>@Model.Bio</p>
+                        </div>
+                    }
+                    
+                    <div class="mt-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i> Düzenle
+                        </a>
+                        <a asp-action="ResetPassword" asp-route-id="@Model.Id" class="btn btn-warning">
+                            <i class="bi bi-key"></i> Şifre Sıfırla
+                        </a>
+                        <form asp-action="ToggleActive" asp-route-id="@Model.Id" method="post" class="d-inline">
+                            @if (Model.IsActive)
+                            {
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Kullanıcıyı pasif yapmak istediğinize emin misiniz?')">
+                                    <i class="bi bi-toggle-off"></i> Pasif Yap
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Kullanıcıyı aktif yapmak istediğinize emin misiniz?')">
+                                    <i class="bi bi-toggle-on"></i> Aktif Yap
+                                </button>
+                            }
+                        </form>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Sil
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Listeye Dön
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

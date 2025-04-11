@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Kullanım Şartları";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Kabul Edilen Şartlar</h2>
+            <p>Blog Sitemizi kullanarak, bu kullanım şartlarını tam olarak ve koşulsuz kabul etmiş olursunuz. Bu şartları kabul etmiyorsanız, lütfen sitemizi kullanmayınız.</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Hesap Sorumluluğu</h2>
+            <p>Sitemizde hesap oluşturduğunuzda, aşağıdaki sorumlulukları kabul etmiş olursunuz:</p>
+            <ul>
+                <li>Hesap güvenliğinden ve şifrenizin korunmasından sorumlusunuz</li>
+                <li>Hesabınız üzerinden gerçekleştirilen tüm eylemlerden sorumlusunuz</li>
+                <li>Doğru ve güncel bilgiler sağlamayı taahhüt edersiniz</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">İçerik Kullanımı</h2>
+            <p>Blog Sitemizde:</p>
+            <ul>
+                <li>Kullanıcılar tarafından oluşturulan içerik, ilgili kullanıcıya aittir</li>
+                <li>Başkaları tarafından oluşturulan içeriği, izin almadan veya kaynak belirtmeden kopyalamak yasaktır</li>
+                <li>Telif hakkı ihlali, spam, kötü amaçlı içerik paylaşımı yasaktır</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Sorumluluk Reddi</h2>
+            <p>Sitemiz "olduğu gibi" sunulmaktadır. Sitenin kesintisiz çalışacağı, hatasız olacağı veya tüm hizmetlerin her zaman kullanılabilir olacağı garanti edilmez.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Değişiklikler</h2>
+            <p>Bu kullanım şartları zaman zaman güncellenebilir. Kullanıcılar, güncel şartları düzenli olarak kontrol etmekle yükümlüdür.</p>
+            <p>Son Güncelleme: @DateTime.Now.ToShortDateString()</p>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,39 @@
+@model BlogProject.Entities.Category
+
+@{
+    ViewData["Title"] = "Yeni Kategori";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Yeni Kategori Ekle</h6>
+        </div>
+        <div class="card-body">
+            <form asp-area="Admin" asp-controller="Category" asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Name" class="control-label font-weight-bold mb-2">Kategori Adı</label>
+                    <input asp-for="Name" class="form-control form-control-lg" />
+                    <span asp-validation-for="Name" class="text-danger mt-2 d-block"></span>
+                </div>
+
+                <div class="form-group mb-5">
+                    <label asp-for="Description" class="control-label font-weight-bold mb-2">Açıklama</label>
+                    <textarea asp-for="Description" class="form-control form-control-lg" rows="4"></textarea>
+                </div>
+
+                <div class="form-group mt-5">
+                    <input type="submit" value="Kaydet" class="btn btn-primary btn-lg px-5 mr-3" />
+                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-secondary btn-lg px-5">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

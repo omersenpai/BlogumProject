@@ -1,0 +1,142 @@
+﻿@model IEnumerable<BlogProject.Entities.Post>
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="row">
+    <!-- Mesajlar -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Blog Yazıları Listesi -->
+    <div class="col-md-8">
+        <h2 class="mb-4">Son Yazılar</h2>
+        
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info">
+                Henüz blog yazısı bulunmamaktadır.
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var post in Model)
+                {
+                    <div class="col">
+                        <div class="card h-100">
+                            @if (!string.IsNullOrEmpty(post.Image))
+                            {
+                                <img src="~/img/@post.Image" class="card-img-top" alt="@post.Title">
+                            }
+                            else
+                            {
+                                <img src="~/img/softwareDefault.jpg" class="card-img-top" alt="@post.Title">
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@post.Title</h5>
+                                <p class="card-text">@post.Description</p>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small>@post.PublishedOn.ToString("dd.MM.yyyy")</small>
+                                    </div>
+                                    <a href="/post/@post.Url" class="btn btn-sm btn-outline-primary">Devamını Oku</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            <!-- Pagination (Sayfalama) -->
+            @if (ViewBag.TotalPages > 1)
+            {
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        @if (ViewBag.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Önceki</a>
+                            </li>
+                        }
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+
+                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Sonraki</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        }
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="col-md-4">
+        <!-- Kategoriler -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Kategoriler</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @if (ViewBag.Categories != null)
+                    {
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="/kategori/@category.Url" class="text-decoration-none">
+                                    @category.Name
+                                </a>
+                                <span class="badge bg-primary rounded-pill">@(category.Posts?.Count ?? 0)</span>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Son Eklenen Yazılar -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Başka Yazılar</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach (var post in Model.Take(5))
+                    {
+                        <li class="list-group-item">
+                            <a href="/post/@post.Url" class="text-decoration-none">
+                                @post.Title
+                            </a>
+                            <div><small class="text-muted">@post.PublishedOn.ToString("dd.MM.yyyy")</small></div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

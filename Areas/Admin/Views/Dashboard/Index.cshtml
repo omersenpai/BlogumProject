@@ -1,0 +1,139 @@
+@model BlogProject.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
+
+    <!-- İstatistik Kartları -->
+    <div class="row">
+        <!-- Toplam Blog Yazısı -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Toplam Blog Yazısı</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPosts</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toplam Kategori -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Toplam Kategori</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalCategories</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toplam Yorum -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Toplam Yorum</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalComments</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toplam Kullanıcı -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Toplam Kullanıcı</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- İçerik Satırı -->
+    <div class="row">
+        <!-- Son Eklenen Blog Yazıları -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Son Eklenen Blog Yazıları</h6>
+                    <a href="@Url.Action("Index", "Post", new { area = "Admin" })" class="btn btn-sm btn-primary">
+                        <i class="fas fa-arrow-right"></i> Tümünü Gör
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        @foreach (var post in Model.RecentPosts)
+                        {
+                            <a href="@Url.Action("Details", "Post", new { area = "Admin", id = post.PostId })" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">@post.Title</h5>
+                                    <small>@post.PublishedOn.ToString("dd.MM.yyyy HH:mm")</small>
+                                </div>
+                                <p class="mb-1">@post.Description</p>
+                                <small>Yazar: @(post.User?.Name + " " + post.User?.Surname) | Kategori: @post.Category?.Name</small>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Son Eklenen Yorumlar -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Son Yorumlar</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        @foreach (var comment in Model.RecentComments)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">@comment.User?.Name @comment.User?.Surname</h6>
+                                    <small>@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+                                </div>
+                                <p class="mb-1">@comment.Content</p>
+                                <small>Blog: <a href="@Url.Action("Details", "Post", new { area = "Admin", id = comment.PostId })">@comment.Post?.Title</a></small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

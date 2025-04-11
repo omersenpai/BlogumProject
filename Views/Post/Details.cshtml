@@ -1,0 +1,529 @@
+@model BlogProject.Entities.Post
+@using Microsoft.AspNetCore.Identity
+@using BlogProject.Entities
+@using System.Security.Claims
+@inject SignInManager<User> SignInManager
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+
+    <div class="col-md-12 mb-3">
+        <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+            <i class="bi bi-arrow-left"></i> Tüm Yazılara Dön
+        </a>
+    </div>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="col-md-12 mb-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="col-md-12 mb-3">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+
+    <div class="col-md-8">
+        <article>
+          
+            <h1 class="mb-3">@Model.Title</h1>
+            
+        
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <span class="text-muted">
+                        <i class="bi bi-person"></i> @Model.User.UserName
+                    </span>
+                    <span class="text-muted ms-3">
+                        <i class="bi bi-calendar"></i> @Model.PublishedOn.ToString("dd.MM.yyyy")
+                    </span>
+                    <span class="text-muted ms-3">
+                        <i class="bi bi-tag"></i> 
+                        <a href="/kategori/@Model.Category.Url" class="text-decoration-none">
+                            @Model.Category.Name
+                        </a>
+                    </span>
+                </div>
+                
+            
+                @if (SignInManager.IsSignedIn(User) && (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.UserId || User.IsInRole("Admin")))
+                {
+                    <div>
+                        <a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.PostId" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-pencil"></i> Düzenle
+                        </a>
+                        <a asp-controller="Post" asp-action="Delete" asp-route-id="@Model.PostId" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i> Sil
+                        </a>
+                    </div>
+                }
+            </div>
+            
+        
+            @if (!string.IsNullOrEmpty(Model.Image))
+            {
+                <div class="mb-4">
+                    <img src="~/img/@Model.Image" class="img-fluid rounded" alt="@Model.Title">
+                </div>
+            }
+            
+      
+            <div class="blog-content mb-5">
+                @Html.Raw(Model.Content)
+            </div>
+            
+            <!-- Yorumlar Bölümü -->
+            <div class="mt-5">
+                <h3 class="mb-4" id="comments-counter">Yorumlar (@(Model.Comments != null ? Model.Comments.Count() : 0))</h3>
+                
+                <!-- Hata ve Başarı Mesajları -->
+                @if (TempData["CommentError"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["CommentError"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                
+                @if (TempData["CommentSuccess"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["CommentSuccess"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                
+                <!-- Yorum Listesi -->
+                <div id="comments-section" class="mb-4">
+                    @if (Model.Comments.Any())
+                    {
+                        <div class="comments" id="comments-list">
+                            @foreach (var comment in Model.Comments.OrderByDescending(c => c.CommentId))
+                            {
+                                <div class="card mb-3 comment-card" id="comment-@comment.CommentId">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start mb-3">
+                                            <!-- Kullanıcı profil resmi -->
+                                            <div class="me-3">
+                                                @if (!string.IsNullOrEmpty(comment.User.ProfileImage))
+                                                {
+                                                    <img src="~/img/@comment.User.ProfileImage" class="rounded-circle" width="40" height="40" style="object-fit: cover;" alt="@comment.User.UserName">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/img/userImage.jpg" class="rounded-circle" width="40" height="40" style="object-fit: cover;" alt="@comment.User.UserName">
+                                                }
+                                            </div>
+                                            
+                                            <!-- Kullanıcı bilgileri ve yorum -->
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold">@comment.User.Name @comment.User.Surname</h6>
+                                                        <small class="text-muted">@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+                                                    </div>
+                                                    
+                                                    <!-- Yorumu sil butonu (sadece yorum sahibi veya admin) -->
+                                                    @if (SignInManager.IsSignedIn(User) && (User.FindFirstValue(ClaimTypes.NameIdentifier) == comment.UserId || User.IsInRole("Admin")))
+                                                    {
+                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="@comment.CommentId">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    }
+                                                </div>
+                                                <p class="card-text mt-2">@comment.Content</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info" id="no-comments-message">
+                            Henüz yorum yapılmamış. İlk yorumu siz yapın!
+                        </div>
+                    }
+                </div>
+                
+                <!-- Yeni Yorum Formu (sadece giriş yapmış kullanıcılar) -->
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Yorum Yap</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="comment-alert" class="alert d-none"></div>
+                            
+                            <form id="comment-form">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" id="postId" value="@Model.PostId" />
+                                
+                                <div class="mb-3">
+                                    <textarea id="comment-content" class="form-control" rows="3" placeholder="Yorumunuzu yazın..." required></textarea>
+                                    <div class="invalid-feedback">
+                                        Lütfen bir yorum yazın.
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Yorum Ekle</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        Yorum yapabilmek için <a asp-controller="Account" asp-action="Login">giriş yapmalısınız</a>.
+                    </div>
+                }
+            </div>
+        </article>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="col-md-4">
+        <!-- Kategoriler -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Kategoriler</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @if (ViewBag.Categories != null)
+                    {
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="/kategori/@category.Url" class="text-decoration-none">
+                                    @category.Name
+                                </a>
+                                <span class="badge bg-primary rounded-pill">@(category.Posts != null ? category.Posts.Count : 0)</span>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Yazar Hakkında -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Yazar Hakkında</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    @if (!string.IsNullOrEmpty(Model.User.ProfileImage))
+                    {
+                        <img src="~/img/@Model.User.ProfileImage" class="rounded-circle me-3" width="50" height="50" alt="@Model.User.UserName">
+                    }
+                    else
+                    {
+                        <img src="~/img/userImage.jpg" class="rounded-circle me-3" width="50" height="50" alt="@Model.User.UserName">
+                    }
+                    <h5 class="mb-0">@Model.User.UserName</h5>
+                </div>
+                
+                @if (!string.IsNullOrEmpty(Model.User.Bio))
+                {
+                    <p>@Model.User.Bio</p>
+                }
+                
+                <a asp-controller="Post" asp-action="UserPosts" 
+                   asp-route-id="@Model.UserId" 
+                   asp-route-name="@(Model.User.Name.ToLower() + "-" + Model.User.Surname.ToLower())"
+                   class="btn btn-outline-primary btn-sm">
+                    @Model.User.Name @Model.User.Surname'ın Diğer Yazıları
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const blogContent = document.querySelector('.blog-content');
+            if (blogContent) {
+                const images = blogContent.querySelectorAll('img');
+                images.forEach(img => {
+                    img.classList.add('img-fluid');
+                });
+            }
+            console.log('DOM yüklendi, yorum formunu arıyorum...');
+            const commentForm = document.getElementById('comment-form');
+            console.log('Yorum formu bulundu mu:', commentForm !== null);
+            
+            //ajax
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(e) {
+                    console.log('Form gönderildi!');
+                    e.preventDefault();
+                    
+                    const commentContent = document.getElementById('comment-content').value.trim();
+                    const postId = document.getElementById('postId').value;
+                    const commentAlert = document.getElementById('comment-alert');
+                    
+                    console.log('Yorum içeriği:', commentContent);
+                    console.log('Post ID:', postId);
+                    
+                    if (!commentContent) {
+                        showAlert(commentAlert, 'Yorum içeriği boş olamaz.', 'danger');
+                        return;
+                    }
+                    
+ 
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                    console.log('CSRF Token:', token);
+                    
+                    fetch('/Comment/CreateComment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'RequestVerificationToken': token
+                        },
+                        body: new URLSearchParams({
+                            content: commentContent,
+                            postId: postId
+                        })
+                    })
+                    .then(response => {
+                        console.log('AJAX yanıtı alındı, durum:', response.status);
+                        if (!response.ok) {
+                            throw new Error('Sunucu yanıtı başarısız: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('AJAX yanıtı:', data);
+                        if (data.success) {
+                            // Başarılı
+                            showAlert(commentAlert, data.message, 'success');
+                            
+                            // Form temizle
+                            document.getElementById('comment-content').value = '';
+                            
+                            // Yeni yorumu ekle
+                            addCommentToList(data.comment);
+                            
+                            // Yorum sayacını güncelle
+                            updateCommentsCounter(1);
+                            
+                            // Sayfa yenilenmeden yoruma kaydır
+                            document.getElementById('comments-section').scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                            // Hata
+                            showAlert(commentAlert, data.message, 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('AJAX Hatası:', error);
+                        showAlert(commentAlert, 'Bir hata oluştu, lütfen tekrar deneyin.', 'danger');
+                    });
+                });
+            }
+            
+        
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-comment-btn') || 
+                    e.target.closest('.delete-comment-btn')) {
+                    
+                    console.log('Silme butonu tıklandı');
+                    const button = e.target.classList.contains('delete-comment-btn') ? 
+                        e.target : e.target.closest('.delete-comment-btn');
+                    
+                    const commentId = button.getAttribute('data-comment-id');
+                    console.log('Silinecek yorum ID:', commentId);
+                    
+                    if (confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
+                        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                        
+                        fetch('/Comment/DeleteComment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'RequestVerificationToken': token
+                            },
+                            body: new URLSearchParams({
+                                id: commentId
+                            })
+                        })
+                        .then(response => {
+                            console.log('Silme yanıtı alındı, durum:', response.status);
+                            if (!response.ok) {
+                                throw new Error('Sunucu yanıtı başarısız: ' + response.status);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Silme yanıtı:', data);
+                            if (data.success) {
+                                // Başarılı ise yorumu kaldır
+                                const commentElement = document.getElementById(`comment-${commentId}`);
+                                if (commentElement) {
+                                    commentElement.remove();
+                                    
+                                    // Yorum sayacını güncelle
+                                    updateCommentsCounter(-1);
+                                    
+                                    // Yorum yoksa mesajı göster
+                                    const commentsList = document.getElementById('comments-list');
+                                    if (commentsList && commentsList.children.length === 0) {
+                                        const noCommentsMessage = document.getElementById('no-comments-message');
+                                        if (noCommentsMessage) {
+                                            noCommentsMessage.classList.remove('d-none');
+                                        } else {
+                                            const newMessage = document.createElement('div');
+                                            newMessage.id = 'no-comments-message';
+                                            newMessage.className = 'alert alert-info';
+                                            newMessage.textContent = 'Henüz yorum yapılmamış. İlk yorumu siz yapın!';
+                                            document.getElementById('comments-section').appendChild(newMessage);
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Hata
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Silme hatası:', error);
+                            alert('Bir hata oluştu, lütfen tekrar deneyin.');
+                        });
+                    }
+                }
+            });
+        });
+        
+
+        function showAlert(element, message, type) {
+            console.log('Uyarı gösteriliyor:', message, type);
+            element.textContent = message;
+            element.className = `alert alert-${type}`;
+            element.classList.remove('d-none');
+            
+            // 5 saniye sonra uyarıyı gizle
+            setTimeout(() => {
+                element.classList.add('d-none');
+            }, 5000);
+        }
+        
+        function addCommentToList(comment) {
+            console.log('Yorum listeye ekleniyor:', comment);
+            
+            
+            const commentsList = document.getElementById('comments-list');
+            
+            // Eğer liste yoksa oluştur
+            if (!commentsList) {
+                console.log('Yorum listesi bulunamadı, yeni liste oluşturuluyor');
+                const commentsSection = document.getElementById('comments-section');
+                const newCommentsList = document.createElement('div');
+                newCommentsList.id = 'comments-list';
+                newCommentsList.className = 'comments';
+                commentsSection.appendChild(newCommentsList);
+                
+                // "Henüz yorum yapılmamış" mesajını gizle
+                const noCommentsMessage = document.getElementById('no-comments-message');
+                if (noCommentsMessage) {
+                    noCommentsMessage.classList.add('d-none');
+                }
+                
+                // Yeni oluşturulan listeyi kullanmaya devam et
+                return addCommentToList(comment);
+            }
+            
+            // Mevcut kullanıcı ID'si ve admin durumu
+            const currentUserId = '@User.FindFirstValue(ClaimTypes.NameIdentifier)';
+            const isAdmin = '@User.IsInRole("Admin")' === 'True';
+            
+            console.log('Mevcut kullanıcı:', currentUserId);
+            console.log('Admin mi:', isAdmin);
+            
+            // Yeni yorum kartını oluştur
+            const commentCard = document.createElement('div');
+            commentCard.className = 'card mb-3 comment-card';
+            commentCard.id = `comment-${comment.id}`;
+            
+            // Profil resmi için kaynak URL'si
+            const profileImage = comment.profileImage || 'userImage.jpg';
+            
+            
+            let deleteButton = '';
+            if (currentUserId === comment.userId || isAdmin) {
+                deleteButton = `
+                    <button type="button" class="btn btn-sm btn-outline-danger delete-comment-btn" data-comment-id="${comment.id}">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                `;
+            }
+            
+          
+            commentCard.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex align-items-start mb-3">
+                        <!-- Kullanıcı profil resmi -->
+                        <div class="me-3">
+                            <img src="/img/${profileImage}" class="rounded-circle" width="40" height="40" style="object-fit: cover;" alt="${comment.fullName || comment.userName}">
+                        </div>
+                        
+                        <!-- Kullanıcı bilgileri ve yorum -->
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">${comment.fullName || comment.userName}</h6>
+                                    <small class="text-muted">${comment.createdAt}</small>
+                                </div>
+                                
+                                <!-- Yorumu sil butonu -->
+                                ${deleteButton}
+                            </div>
+                            <p class="card-text mt-2">${comment.content}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            
+            commentsList.insertBefore(commentCard, commentsList.firstChild);
+            
+            console.log('Yorum başarıyla eklendi');
+        }
+        
+        // Yorum sayacını güncelleme fonksiyonu
+        function updateCommentsCounter(change) {
+            const counterElement = document.getElementById('comments-counter');
+            if (counterElement) {
+                // Mevcut metni al
+                let text = counterElement.textContent;
+                // Parantez içindeki sayıyı çıkar
+                const match = text.match(/Yorumlar \((\d+)\)/);
+                if (match && match[1]) {
+                    /
+                    let count = parseInt(match[1], 10) + change;
+                    // Negatif olmasını önle
+                    if (count < 0) count = 0;
+                    
+                    counterElement.textContent = `Yorumlar (${count})`;
+                    console.log('Yorum sayacı güncellendi:', count);
+                }
+            }
+        }
+    </script>
+} 

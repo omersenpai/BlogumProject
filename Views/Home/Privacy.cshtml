@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Gizlilik Politikası";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Bilgi Toplama</h2>
+            <p>Blog Sitemiz, kullanıcıların siteyi kullanırken paylaştıkları kişisel bilgileri (ad, soyad, e-posta adresi, vb.) ve teknik bilgileri (IP adresi, tarayıcı bilgileri, ziyaret edilen sayfalar, vb.) toplar.</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Bilgi Kullanımı</h2>
+            <p>Toplanan bilgiler:</p>
+            <ul>
+                <li>Kullanıcı deneyimini iyileştirmek</li>
+                <li>Web sitesinin içeriğini kişiselleştirmek</li>
+                <li>Kullanıcı hesaplarını yönetmek</li>
+                <li>Kullanıcı ile iletişim kurmak</li>
+            </ul>
+            <p>için kullanılır.</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Çerezler ve Benzer Teknolojiler</h2>
+            <p>Sitemiz, kullanıcı deneyimini iyileştirmek ve site kullanım istatistiklerini toplamak için çerezleri kullanmaktadır. Kullanıcılar, tarayıcı ayarlarından çerez kullanımını sınırlandırabilir veya engelleyebilirler.</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Bilgi Güvenliği</h2>
+            <p>Kişisel bilgilerinizi korumak için çeşitli güvenlik önlemleri uygulanmaktadır. Ancak internet üzerinden hiçbir veri iletiminin %100 güvenli olmadığını hatırlatırız.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Değişiklikler</h2>
+            <p>Bu gizlilik politikası zaman zaman güncellenebilir. Yapılan değişiklikler bu sayfada yayınlanarak kullanıcılara bildirilecektir.</p>
+            <p>Son Güncelleme: @DateTime.Now.ToShortDateString()</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+@model BlogProject.Entities.Category
+
+@{
+    ViewData["Title"] = "Kategori Sil";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var postCount = ViewBag.PostCount ?? 0;
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Kategori Silme Onayı</h6>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-danger">
+                <h5>Bu kategoriyi silmek istediğinize emin misiniz?</h5>
+                <p>Bu işlem geri alınamaz ve kategoriye bağlı tüm blog yazıları etkilenebilir.</p>
+                
+                @if(postCount > 0)
+                {
+                    <div class="mt-3 alert alert-warning">
+                        <strong>Dikkat!</strong> Bu kategoriye bağlı @postCount adet blog yazısı bulunmaktadır. 
+                        Kategoriyi silmek için önce bu yazıları başka bir kategoriye taşımanız veya silmeniz gerekiyor.
+                    </div>
+                }
+            </div>
+
+            <dl class="row">
+                <dt class="col-sm-2">
+                    Kategori Adı
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    Açıklama
+                </dt>
+                <dd class="col-sm-10">
+                    @(ViewBag.Description ?? Model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    Blog Yazısı Sayısı
+                </dt>
+                <dd class="col-sm-10">
+                    @postCount
+                </dd>
+            </dl>
+
+            <form asp-area="Admin" asp-controller="Category" asp-action="Delete" method="post">
+                <input type="hidden" asp-for="CategoryId" />
+                <input type="submit" value="Sil" class="btn btn-danger" @(postCount > 0 ? "disabled" : "") />
+                <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-secondary">İptal</a>
+            </form>
+        </div>
+    </div>
+</div>

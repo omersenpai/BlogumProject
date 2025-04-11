@@ -1,0 +1,44 @@
+@using Microsoft.AspNetCore.Identity
+@using BlogProject.Entities
+@using System.Security.Claims
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Post" asp-action="Create" title="Yeni Yazı">
+            <i class="bi bi-plus-circle"></i> Yazı Ekle
+        </a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @{
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var displayName = User.FindFirstValue(ClaimTypes.Name) ?? "Kullanıcı";
+            }
+            <i class="bi bi-person-circle"></i> Merhaba @displayName!
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profilim</a></li>
+            <li><a class="dropdown-item" asp-controller="Post" asp-action="UserPosts" asp-route-id="@User.FindFirstValue(ClaimTypes.NameIdentifier)">Yazılarım</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="dropdown-item">Çıkış Yap</button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Account" asp-action="Register">Kayıt Ol</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Account" asp-action="Login">Giriş Yap</a>
+    </li>
+}
+</ul> 

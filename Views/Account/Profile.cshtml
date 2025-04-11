@@ -1,0 +1,109 @@
+@model BlogProject.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "Profil Bilgilerim";
+}
+
+<div class="row">
+    <!-- TempData mesajlarını göster -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="col-md-12 mb-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="col-md-12 mb-3">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Profil Bilgileri</h3>
+            </div>
+            <div class="card-body text-center">
+                @if (!string.IsNullOrEmpty(Model.ProfileImage))
+                {
+                    <img src="~/img/@Model.ProfileImage" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;" alt="Profil Resmi">
+                }
+                else
+                {
+                    <img src="~/img/userImage.jpg" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;" alt="Varsayılan Profil Resmi">
+                }
+                
+                <h4>@Model.Name @Model.Surname</h4>
+                <p class="text-muted">@Model.Email</p>
+                
+                @if (!string.IsNullOrEmpty(Model.Bio))
+                {
+                    <p class="text-muted">@Model.Bio</p>
+                }
+                else
+                {
+                    <p class="text-muted">Henüz bir biyografi eklenmemiş.</p>
+                }
+                
+                <a asp-controller="Account" asp-action="ChangePassword" class="btn btn-outline-primary mt-2">Şifre Değiştir</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Profil Güncelleme</h3>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Account" asp-action="Profile" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Ad</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Surname" class="form-label">Soyad</label>
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">E-posta</label>
+                        <input asp-for="Email" class="form-control" readonly />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Bio" class="form-label">Biyografi</label>
+                        <textarea asp-for="Bio" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Bio" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Profil Resmi</label>
+                        <input type="file" name="profileImage" class="form-control" accept="image/*" />
+                        <small class="form-text text-muted">Profil resmi yüklemek için bir görsel seçin. Bu alan isteğe bağlıdır.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Güncelle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+} 

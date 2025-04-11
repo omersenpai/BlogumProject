@@ -1,0 +1,55 @@
+@model BlogProject.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">@ViewData["Title"]</h2>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">E-posta</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Şifre</label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input asp-for="RememberMe" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label">Beni Hatırla</label>
+                    </div>
+                    
+                    <div class="mb-3 d-grid">
+                        <button type="submit" class="btn btn-primary">Giriş Yap</button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p>Hesabınız yok mu? <a asp-action="Register">Kayıt Olun</a></p>
+                        <p><a href="javascript:void(0)" id="forgotPassword" class="text-decoration-none">Şifremi Unuttum</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    
+    <script>
+        document.getElementById('forgotPassword').addEventListener('click', function() {
+            alert('Şifrenizi öğrenmek veya yeni şifre almak istiyorsanız admin@blogum.com adresinden bize ulaşın.');
+        });
+    </script>
+} 

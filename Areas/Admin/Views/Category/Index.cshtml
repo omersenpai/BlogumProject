@@ -1,0 +1,84 @@
+@model IEnumerable<BlogProject.Entities.Category>
+
+@{
+    ViewData["Title"] = "Kategoriler";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Başarı ve Hata Mesajları -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle mr-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Kategoriler</h6>
+            <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Yeni Kategori
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="categoriesTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kategori Adı</th>
+                            <th>Açıklama</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model)
+                        {
+                            <tr>
+                                <td>@category.CategoryId</td>
+                                <td>@category.Name</td>
+                                <td>@Html.DisplayFor(modelItem => category.Description)</td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@category.CategoryId" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </a>
+                                    <a asp-area="Admin" asp-controller="Category" asp-action="Delete" asp-route-id="@category.CategoryId" class="btn btn-danger btn-sm" 
+                                       onclick="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#categoriesTable').DataTable();
+            
+            // 5 saniye sonra uyarıları otomatik kapat
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 5000);
+        });
+    </script>
+} 

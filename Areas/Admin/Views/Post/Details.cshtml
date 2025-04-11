@@ -1,0 +1,91 @@
+@model BlogProject.Entities.Post
+
+@{
+    ViewData["Title"] = "Blog Yazısı Detayları";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Blog Yazısı Detayları</h6>
+            <div>
+                <a asp-area="Admin" asp-controller="Post" asp-action="Edit" asp-route-id="@Model.PostId" class="btn btn-warning btn-sm">
+                    <i class="fas fa-edit"></i> Düzenle
+                </a>
+                <a asp-area="Admin" asp-controller="Post" asp-action="Index" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Listeye Dön
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h2>@Model.Title</h2>
+                    <div class="d-flex text-muted small mb-3">
+                        <div class="me-3"><i class="fas fa-user"></i> @(Model.User?.Name + " " + Model.User?.Surname)</div>
+                        <div class="me-3"><i class="fas fa-calendar"></i> @Model.PublishedOn.ToString("dd.MM.yyyy HH:mm")</div>
+                        <div class="me-3"><i class="fas fa-folder"></i> @(Model.Category?.Name ?? "Kategori Yok")</div>
+                        <div>
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Pasif</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="~/img/@Model.Image" alt="@Model.Title" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
+                    }
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Açıklama</h5>
+                </div>
+                <div class="card-body">
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">İçerik</h5>
+                </div>
+                <div class="card-body">
+                    @Html.Raw(Model.Content)
+                </div>
+            </div>
+
+            @if (Model.Comments != null && Model.Comments.Any())
+            {
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Yorumlar (@Model.Comments.Count)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt))
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="mb-1">@comment.User?.Name @comment.User?.Surname</h6>
+                                        <small>@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+                                    </div>
+                                    <p class="mb-1">@comment.Content</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div> 

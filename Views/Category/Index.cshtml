@@ -1,0 +1,44 @@
+@model IEnumerable<BlogProject.Entities.Category>
+
+@{
+    ViewData["Title"] = "Kategoriler";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Kategoriler</h1>
+    
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var category in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@category.Name</h5>
+                            <p class="card-text text-muted">
+                                @(string.IsNullOrEmpty(category.Description) 
+                                    ? "Bu kategori için açıklama bulunmamaktadır." 
+                                    : category.Description)
+                            </p>
+                            <p class="badge bg-primary text-white">
+                                @(category.Posts?.Count() ?? 0) Yazı
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a href="/kategori/@category.Url" class="btn btn-outline-primary">Yazıları Görüntüle</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    Henüz kategori bulunmamaktadır.
+                </div>
+            </div>
+        }
+    </div>
+</div> 
