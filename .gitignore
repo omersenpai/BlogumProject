@@ -1,0 +1,42 @@
+# .NET Core
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Logs
+logs/
+*.log
+logs.txt
+profile-logs.txt
+user-delete-logs.txt
+
+# Environment Settings
+appsettings.Development.json
+appsettings.Production.json
+
+# Others
+[Tt]emp/
+[Oo]bj/
+[Bb]in/
+[Nn]ode_modules/
+_UpgradeReport_Files/
+[Pp]ackages/ 
