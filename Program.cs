@@ -11,19 +11,19 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Email ayarlarını yapılandır
+
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, MailKitEmailService>();
 
-// Loglama için dosya oluştur
+// Loglama için dosya oluşturduk
 var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs.txt");
 System.IO.File.WriteAllText(logFilePath, "Application Logs\n" + DateTime.Now.ToString() + "\n\n");
 
-// DbContext ve Identity servislerini ekle
+
 builder.Services.AddDbContext<BlogContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     
-    // Development ortamında detaylı loglama etkinleştir
+    // Development ortamında detaylı loglama eklendi
     if (builder.Environment.IsDevelopment())
     {
         options.EnableSensitiveDataLogging()
@@ -50,7 +50,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options => {
 .AddDefaultTokenProviders()
 .AddUserValidator<CustomUserValidator>();
 
-// SignInManager özelleştirmesi
+
 builder.Services.AddScoped<SignInManager<User>, CustomSignInManager>();
 
 // Cookie ayarlarını yapılandır
@@ -61,7 +61,7 @@ builder.Services.ConfigureApplicationCookie(options => {
     options.ExpireTimeSpan = TimeSpan.FromHours(1);
 });
 
-// Repository servisleri
+
 builder.Services.AddRepositories();
 
 // Add services to the container.
@@ -88,7 +88,7 @@ using (var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
     app.UseHsts();
 }
 
