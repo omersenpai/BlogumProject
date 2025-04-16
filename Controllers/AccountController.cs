@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using BlogProject.Entities;
 using BlogProject.Models;
+using BlogProject.Models.ViewModels;
+using BlogProject.Services.Abstract;
 using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +13,10 @@ using System.Linq;
 using BlogProject.Data;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Encodings.Web;
+using System;
+using System.Threading.Tasks;
+using BlogProject.Services;
 
 namespace BlogProject.Controllers
 {
@@ -21,17 +27,20 @@ namespace BlogProject.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly BlogContext _context;
         private readonly ILogger<AccountController> _logger;
+        private readonly IEmailService _emailService;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             BlogContext context,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
             _logger = logger;
+            _emailService = emailService;
         }
 
         
@@ -391,6 +400,101 @@ namespace BlogProject.Controllers
             }
             
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    // Güvenlik için kullanıcı bulunamasa bile aynı mesajı göster
+                    return RedirectToAction(nameof(ForgotPasswordConfirmation));
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action(
+                    "ResetPassword",
+                    "Account",
+                    new { email = user.Email, code = code },
+                    protocol: Request.Scheme);
+
+                await _emailService.SendEmailAsync(
+                    user.Email,
+                    "Şifre Sıfırlama",
+                    $"Lütfen şifrenizi sıfırlamak için <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>buraya tıklayın</a>.");
+
+                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string code = null)
+        {
+            if (code == null)
+            {
+                return BadRequest("Şifre sıfırlama için bir kod gereklidir.");
+            }
+            var model = new ResetPasswordViewModel { Code = code };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Güvenlik için kullanıcı bulunamasa bile başarılı sayfasına yönlendir
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
         }
     }
 } 

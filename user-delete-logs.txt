@@ -1,0 +1,8 @@
+### Kullanıcı Silme - 4/10/2025 9:37:15 PM - ID: a58797bf-5c21-454f-974d-04cde6e4cfb7 ###
+Silme öncesi kullanıcı durumu: IsDeleted=False, IsActive=True
+Değişiklik sonrası kullanıcı durumu: IsDeleted=True, IsActive=True
+UserManager.UpdateAsync sonucu: Başarılı=False
+Hata: UserIsDeleted - Bu hesap silinmiş durumda. Lütfen yönetici ile iletişime geçin.
+UserManager başarısız oldu, doğrudan context ile güncelleme deneniyor...
+DbContext ile güncelleme tamamlandı.
+Güncelleme sonrası DB'den alınan kullanıcı durumu: IsDeleted=True, IsActive=True

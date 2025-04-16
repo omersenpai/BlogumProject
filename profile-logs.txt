@@ -1,0 +1,124 @@
+### Profil Güncelleme - 4/8/2025 4:20:24 PM ###
+ModelState geçerli değil.
+Error in ProfileImage: The Profil Resmi field is required.
+İşlem başarısız, form görünümüne dönülüyor.
+### Profil Güncelleme - 4/8/2025 4:24:23 PM ###
+Profil güncellemesi başladı. UserId: 471374a3-1050-4a29-82c4-dc402ca18765
+Güncellenecek kullanıcı: iso@deneme.com, Name: İso , Surname: Sargın, Bio: , ProfileImage: userImage.jpg
+Yeni değerler: Name: İso , Surname: Sargın, Bio: asdasdasd
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: İso 
+Yeni claim eklendi: İso 
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: İso , Surname: Sargın, Bio: asdasdasd, ProfileImage: userImage.jpg
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/8/2025 4:24:32 PM ###
+Profil güncellemesi başladı. UserId: 471374a3-1050-4a29-82c4-dc402ca18765
+Güncellenecek kullanıcı: iso@deneme.com, Name: İso , Surname: Sargın, Bio: asdasdasd, ProfileImage: userImage.jpg
+Yeni değerler: Name: İso , Surname: Sargın, Bio: asdasdasd
+Profil resmi yükleniyor. Boyut: 521166 bytes
+Profil resmi yüklendi: d5a9ce2c-a27b-4214-a56d-70b11487b49a.JPEG
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: İso 
+Yeni claim eklendi: İso 
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: İso , Surname: Sargın, Bio: asdasdasd, ProfileImage: d5a9ce2c-a27b-4214-a56d-70b11487b49a.JPEG
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/8/2025 4:25:13 PM ###
+Profil güncellemesi başladı. UserId: 471374a3-1050-4a29-82c4-dc402ca18765
+Güncellenecek kullanıcı: iso@deneme.com, Name: İso , Surname: Sargın, Bio: asdasdasd, ProfileImage: d5a9ce2c-a27b-4214-a56d-70b11487b49a.JPEG
+Yeni değerler: Name: İso , Surname: Sargın, Bio: asdasdasd
+Profil resmi yükleniyor. Boyut: 670551 bytes
+Profil resmi yüklendi: 1f52158e-e6a6-4a68-ae53-f6bd80cdfb63.jpg
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: İso 
+Yeni claim eklendi: İso 
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: İso , Surname: Sargın, Bio: asdasdasd, ProfileImage: 1f52158e-e6a6-4a68-ae53-f6bd80cdfb63.jpg
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/8/2025 6:32:53 PM ###
+Profil güncellemesi başladı. UserId: c0d85feb-cdb4-4eea-ae24-3746df6a0684
+Güncellenecek kullanıcı: ceren@gmail.com, Name: Ceren, Surname: Durmuş, Bio: , ProfileImage: userImage.jpg
+Yeni değerler: Name: Ceren, Surname: Durmuş, Bio: asdsada
+Profil resmi yükleniyor. Boyut: 226934 bytes
+Profil resmi yüklendi: 6037a9d9-a9ee-4c6e-a419-4c293d26e654.JPEG
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: Ceren
+Yeni claim eklendi: Ceren
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: Ceren, Surname: Durmuş, Bio: asdsada, ProfileImage: 6037a9d9-a9ee-4c6e-a419-4c293d26e654.JPEG
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/9/2025 4:02:03 PM ###
+Profil güncellemesi başladı. UserId: bd58dc56-b634-4f5a-8a64-95abab998a11
+Güncellenecek kullanıcı: omersargin4116@hotmail.com, Name: Ömer Tarık, Surname: Sargın, Bio: , ProfileImage: userImage.jpg
+Yeni değerler: Name: Ömer Tarık, Surname: Sargın, Bio: Software Engineer
+Profil resmi yükleniyor. Boyut: 90010 bytes
+Profil resmi yüklendi: e872497b-20a2-47ed-9228-bf0240c8eb6f.jpg
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: Ömer Tarık
+Yeni claim eklendi: Ömer Tarık
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: Ömer Tarık, Surname: Sargın, Bio: Software Engineer, ProfileImage: e872497b-20a2-47ed-9228-bf0240c8eb6f.jpg
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/10/2025 9:08:36 PM ###
+Profil güncellemesi başladı. UserId: f03e02e0-640b-4695-926e-a7c4c400adb9
+Güncellenecek kullanıcı: omersargin@deneme.com, Name: Ömer, Surname: Sargın, Bio: Yazılım mühendisi, ProfileImage: p1.jpg
+Yeni değerler: Name: Ömer, Surname: Sargın, Bio: Yazılım Geliştirici deneme hesabı
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: Ömer
+Yeni claim eklendi: Ömer
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: Ömer, Surname: Sargın, Bio: Yazılım Geliştirici deneme hesabı, ProfileImage: p1.jpg
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/10/2025 9:09:56 PM ###
+Profil güncellemesi başladı. UserId: 471374a3-1050-4a29-82c4-dc402ca18765
+Güncellenecek kullanıcı: iso@deneme.com, Name: İsmail, Surname: Sargın, Bio: asdasdasd, ProfileImage: 1f52158e-e6a6-4a68-ae53-f6bd80cdfb63.jpg
+Yeni değerler: Name: İsmail, Surname: Sargın, Bio: Kendini geliştiren
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: İso 
+Yeni claim eklendi: İsmail
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: İsmail, Surname: Sargın, Bio: Kendini geliştiren, ProfileImage: 1f52158e-e6a6-4a68-ae53-f6bd80cdfb63.jpg
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/11/2025 6:14:09 PM ###
+Profil güncellemesi başladı. UserId: 0721c608-9131-4f7d-8741-edf3feb89344
+Güncellenecek kullanıcı: cerendurmus@deneme.com, Name: Ceren, Surname: Durmuş, Bio: Web tasarımcı, ProfileImage: p2.jpg
+Yeni değerler: Name: Ceren, Surname: Durmuş, Bio: Web tasarımcı
+Profil resmi yükleniyor. Boyut: 10620 bytes
+Profil resmi yüklendi: 4dc5e761-c38c-4bb6-b468-fa16080c6476.jpg
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: Ceren
+Yeni claim eklendi: Ceren
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: Ceren, Surname: Durmuş, Bio: Web tasarımcı, ProfileImage: 4dc5e761-c38c-4bb6-b468-fa16080c6476.jpg
+İşlem başarılı, yönlendirme yapılıyor.
+### Profil Güncelleme - 4/11/2025 6:14:16 PM ###
+Profil güncellemesi başladı. UserId: 0721c608-9131-4f7d-8741-edf3feb89344
+Güncellenecek kullanıcı: cerendurmus@deneme.com, Name: Ceren, Surname: Durmuş, Bio: Web tasarımcı, ProfileImage: 4dc5e761-c38c-4bb6-b468-fa16080c6476.jpg
+Yeni değerler: Name: Ceren, Surname: Durmuş, Bio: Web tasarımcı
+Profil resmi yükleniyor. Boyut: 15405 bytes
+Profil resmi yüklendi: 104422dc-5109-4555-87a2-6fe869112fd0.jpg
+Basitleştirilmiş güncelleme işlemi başlıyor...
+UserManager.UpdateAsync sonuç: True
+UserManager ile güncelleme başarılı.
+Eski claim kaldırıldı: Ceren
+Yeni claim eklendi: Ceren
+Oturum yenilendi.
+Güncelleme sonrası kullanıcı: Name: Ceren, Surname: Durmuş, Bio: Web tasarımcı, ProfileImage: 104422dc-5109-4555-87a2-6fe869112fd0.jpg
+İşlem başarılı, yönlendirme yapılıyor.

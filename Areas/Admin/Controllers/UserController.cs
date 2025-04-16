@@ -2,6 +2,7 @@ using BlogProject.Data;
 using BlogProject.Data.Abstract;
 using BlogProject.Entities;
 using BlogProject.Models;
+using BlogProject.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace BlogProject.Areas.Admin.Controllers
 {
@@ -182,7 +184,7 @@ namespace BlogProject.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var model = new ResetPasswordViewModel
+            var model = new AdminResetPasswordViewModel
             {
                 UserId = user.Id,
                 Email = user.Email
@@ -194,7 +196,7 @@ namespace BlogProject.Areas.Admin.Controllers
         // Şifre sıfırlama post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword(AdminResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {

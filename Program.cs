@@ -1,11 +1,19 @@
 using BlogProject.Data;
 using BlogProject.Data.Concrete.EfCore;
+using BlogProject.Data.Abstract;
+using BlogProject.Services.Abstract;
+using BlogProject.Services.Concrete;
 using BlogProject.Entities;
+using BlogProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Email ayarlarını yapılandır
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, MailKitEmailService>();
 
 // Loglama için dosya oluştur
 var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs.txt");
